@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drug Info QR Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+    }
+    input, button, textarea {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    textarea {
+      resize: vertical;
+      height: 60px;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    /* ? QR code container centered */
+    #qrcode {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #downloadBtn {
+      display: none;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #downloadBtn:hover {
+      background: #1e7e34;
+    }
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: left;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Drug Information - QR Code Generator</h2>
+
+  <form id="drugForm">
+    <input type="text" id="name" placeholder="Drug Name" required><br>
+    <input type="date" id="mfg" placeholder="Mfg Date" required><br>
+    <input type="date" id="expiry" placeholder="Expiry Date" required><br>
+    <input type="text" id="batch" placeholder="Batch Number" required><br>
+    <textarea id="uses" placeholder="Uses of the Drug" required></textarea><br>
+    <textarea id="sideEffects" placeholder="Side Effects" required></textarea><br>
+    <button type="submit">Generate QR</button>
+  </form>
+
+  <!-- ? QR code always centered -->
+  <div id="qrcode"></div>
+  <button id="downloadBtn">Download QR Code</button>
+
+  <div class="result-box" id="drugInfoBox" style="display:none;">
+    <h3>Drug Information</h3>
+    <p id="drugDetails"></p>
+  </div>
+
+  <!-- ? QRCode.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <script>
+    let qrCode; // store QR object
+
+    document.getElementById('drugForm').addEventListener('submit', function(e){
+      e.preventDefault();
+
+      // Collect form data
+      let drugData = {
+        name: document.getElementById('name').value,
+        mfg: document.getElementById('mfg').value,
+        expiry: document.getElementById('expiry').value,
+        batch: document.getElementById('batch').value,
+        uses: document.getElementById('uses').value,
+        sideEffects: document.getElementById('sideEffects').value
+      };
+
+      // Convert drug data into text
+      let drugInfo = 
+        `Name: ${drugData.name}\n` +
+        `Mfg Date: ${drugData.mfg}\n` +
+        `Expiry: ${drugData.expiry}\n` +
+        `Batch: ${drugData.batch}\n` +
+        `Uses: ${drugData.uses}\n` +
+        `Side Effects: ${drugData.sideEffects}`;
+
+      // Show drug info below the QR
+      document.getElementById("drugInfoBox").style.display = "block";
+      document.getElementById("drugDetails").innerText = drugInfo;
+
+      // Clear previous QR
+      document.getElementById("qrcode").innerHTML = "";
+
+      // ? Generate new QR code
+      qrCode = new QRCode(document.getElementById("qrcode"), {
+        text: drugInfo,
+        width: 200,
+        height: 200
+      });
+
+      // Show download button
+      document.getElementById("downloadBtn").style.display = "inline-block";
+    });
+
+    // ? Download QR code as image
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+      let qrCanvas = document.querySelector('#qrcode canvas');
+      let qrImg = document.querySelector('#qrcode img');
+      let link = document.createElement('a');
+      link.download = "drug_qr.png";
+
+      if (qrCanvas) {
+        link.href = qrCanvas.toDataURL("image/png");
+      } else if (qrImg) {
+        link.href = qrImg.src;
+      }
+
+      link.click();
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drug Info QR Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    h2 {
+      color: #333;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+    }
+    input, button, textarea {
+      width: 90%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    textarea {
+      resize: vertical;
+      height: 60px;
+    }
+    button {
+      background: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    /* ? QR code container centered */
+    #qrcode {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #downloadBtn {
+      display: none;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #downloadBtn:hover {
+      background: #1e7e34;
+    }
+    .result-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: left;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h2>Drug Information - QR Code Generator</h2>
+
+  <form id="drugForm">
+    <input type="text" id="name" placeholder="Drug Name" required><br>
+    <input type="date" id="mfg" placeholder="Mfg Date" required><br>
+    <input type="date" id="expiry" placeholder="Expiry Date" required><br>
+    <input type="text" id="batch" placeholder="Batch Number" required><br>
+    <textarea id="uses" placeholder="Uses of the Drug" required></textarea><br>
+    <textarea id="sideEffects" placeholder="Side Effects" required></textarea><br>
+    <button type="submit">Generate QR</button>
+  </form>
+
+  <!-- ? QR code always centered -->
+  <div id="qrcode"></div>
+  <button id="downloadBtn">Download QR Code</button>
+
+  <div class="result-box" id="drugInfoBox" style="display:none;">
+    <h3>Drug Information</h3>
+    <p id="drugDetails"></p>
+  </div>
+
+  <!-- ? QRCode.js library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <script>
+    let qrCode; // store QR object
+
+    document.getElementById('drugForm').addEventListener('submit', function(e){
+      e.preventDefault();
+
+      // Collect form data
+      let drugData = {
+        name: document.getElementById('name').value,
+        mfg: document.getElementById('mfg').value,
+        expiry: document.getElementById('expiry').value,
+        batch: document.getElementById('batch').value,
+        uses: document.getElementById('uses').value,
+        sideEffects: document.getElementById('sideEffects').value
+      };
+
+      // Convert drug data into text
+      let drugInfo = 
+        `Name: ${drugData.name}\n` +
+        `Mfg Date: ${drugData.mfg}\n` +
+        `Expiry: ${drugData.expiry}\n` +
+        `Batch: ${drugData.batch}\n` +
+        `Uses: ${drugData.uses}\n` +
+        `Side Effects: ${drugData.sideEffects}`;
+
+      // Show drug info below the QR
+      document.getElementById("drugInfoBox").style.display = "block";
+      document.getElementById("drugDetails").innerText = drugInfo;
+
+      // Clear previous QR
+      document.getElementById("qrcode").innerHTML = "";
+
+      // ? Generate new QR code
+      qrCode = new QRCode(document.getElementById("qrcode"), {
+        text: drugInfo,
+        width: 200,
+        height: 200
+      });
+
+      // Show download button
+      document.getElementById("downloadBtn").style.display = "inline-block";
+    });
+
+    // ? Download QR code as image
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+      let qrCanvas = document.querySelector('#qrcode canvas');
+      let qrImg = document.querySelector('#qrcode img');
+      let link = document.createElement('a');
+      link.download = "drug_qr.png";
+
+      if (qrCanvas) {
+        link.href = qrCanvas.toDataURL("image/png");
+      } else if (qrImg) {
+        link.href = qrImg.src;
+      }
+
+      link.click();
+    });
+  </script>
+</body>
+</html>
